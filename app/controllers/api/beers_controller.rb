@@ -4,7 +4,7 @@ class Api::BeersController < ApplicationController
   # GET /beers
   # GET /beers.json
   def index
-    @beers = Beer.all
+    @beers = Beer.query(options["query"]).style(options["style"])
     render json: @beers
   end
 
@@ -72,4 +72,14 @@ class Api::BeersController < ApplicationController
     def beer_params
       params.require(:beer).permit(:beer.string, :brewery.string, :style.string, :abv.string)
     end
+
+
+    def options
+      defaults.merge(params)
+    end
+
+    def defaults
+      {"query" => "", "style" => ""}
+    end
+
 end
