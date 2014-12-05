@@ -1,15 +1,18 @@
-class BreweriesController < ApplicationController
+class Api::BreweriesController < ApplicationController
   before_action :set_brewery, only: [:show, :edit, :update, :destroy]
 
   # GET /breweries
   # GET /breweries.json
   def index
     @breweries = Brewery.all
+    render json: @breweries
   end
 
   # GET /breweries/1
   # GET /breweries/1.json
   def show
+    brewery = Brewery.find(params[:id])
+    render json: custom_brewery_show(brewery)
   end
 
   # GET /breweries/new
@@ -70,5 +73,15 @@ class BreweriesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def brewery_params
       params.require(:brewery).permit(:name, :location, :url)
+    end
+
+    def custom_brewery_show(brewery_name)
+      {
+        "name" => brewery_name.name,
+        "location" => brewery_name.location,
+        "url" => brewery_name.url,
+        "id" => brewery_name.id,
+        "beer-selection" => brewery_name.beers.map {|beer| beer.name}
+      }
     end
 end
