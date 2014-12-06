@@ -4,13 +4,15 @@ class Api::BeersController < ApplicationController
   # GET /beers
   # GET /beers.json
   def index
-    @beers = Beer.query(options["query"]).style(options["style"])
-    render json: @beers
+    @beers = Beer.query(options["query"]).style(options["style"]).max_abv(options["max_abv"]).min_abv(options["min_abv"])
+    render json: custom_beer_show(@beers)
   end
 
   # GET /beers/1
   # GET /beers/1.json
   def show
+    beer = Beer.find(params[:id])
+    render json: custom_beer_show(beer)
   end
 
   # GET /beers/new
@@ -73,13 +75,24 @@ class Api::BeersController < ApplicationController
       params.require(:beer).permit(:beer.string, :brewery.string, :style.string, :abv.string)
     end
 
+    def custom_beer_show(beer_name)
+      {
+        "id" => beer_name.id,
+        "name" => beer_name.name,
+        "style" => beer_name.style,
+        "image" => beer_name.image,
+        "brewery_name" => beer_name.brewery.name,
+        "brewery_id" => beer_name.brewery.id
+      }
+    end
+
 
     def options
       defaults.merge(params)
     end
 
     def defaults
-      {"query" => "", "style" => ""}
+      {"query" => "", "style" => "", "max_abv" => "100", "min_abv" => "0"}
     end
 
 end

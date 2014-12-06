@@ -4,7 +4,8 @@ class Api::BreweriesController < ApplicationController
   # GET /breweries
   # GET /breweries.json
   def index
-    @breweries = Brewery.all
+    # @breweries = Brewery.query(options["query"]).beer(options["beer"]).location(options["location"]).name(options["name"])
+    @breweries = Brewery.query(options["query"]).location(options["location"])
     render json: @breweries
   end
 
@@ -81,7 +82,17 @@ class Api::BreweriesController < ApplicationController
         "location" => brewery_name.location,
         "url" => brewery_name.url,
         "id" => brewery_name.id,
+        "image" => brewery_name.image_url,
         "beer-selection" => brewery_name.beers.map {|beer| beer.name}
       }
     end
+
+    def options
+      defaults.merge(params)
+    end
+
+    def defaults
+      {"query" => "", "location" => ""}
+    end
+
 end

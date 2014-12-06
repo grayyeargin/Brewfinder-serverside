@@ -36,4 +36,35 @@ namespace :db do
       end
     end
   end
+
+  desc "seed new_abv columb"
+  task :new_abv => :environment do
+    Beer.all.map do |beer|
+      old_abv = beer.abv
+      beer.update({new_abv: old_abv || ""})
+    end
+  end
+
+  desc "add image urls for brewery"
+  task :brewery_image => :environment do
+
+    Brewery.where("id < 712").each do |brewery|
+      # look up image on search engine
+
+      url = "http://www.webcrawler.com/search/images?fcoid=417&fcop=topnav&fpid=2&aid=8a6747f9-1560-4e3c-a4fc-23a94a890691&ridx=4&q=#{brewery.name.gsub(" ", "+")}+logo+.jpg&ql=&ss=t"
+      begin
+        images = Nokogiri::HTML(open(url))
+      rescue
+        brewery.update(image_url: "http://nancyharmonjenkins.com/wp-content/plugins/nertworks-all-in-one-social-share-tools/images/no_image.png")
+        next
+      end
+      # update brewery with new image
+      if images.css('#imageResults a img')[0]
+        brewery.update({image_url: images.css('#imageResults a img')[0].attribute('src').to_s})
+      else
+        brewery.update(image_url: "http://nancyharmonjenkins.com/wp-content/plugins/nertworks-all-in-one-social-share-tools/images/no_image.png")
+      end
+    end
+  end
+
 end
