@@ -1,0 +1,16 @@
+<h2>Beer Results</h2>
+<ul>
+	<% @beers.each do |beer| %>
+	<li>
+	<a href="/beers/<%= beer.id %>"><%= beer.name %> - <%= beer.brewery.name %></a>
+	</li>
+	<% end %>
+</ul>
+
+
+
+
+
+<% if @no_results %>
+	<h1><%= @no_results %></h1>
+<% end %>

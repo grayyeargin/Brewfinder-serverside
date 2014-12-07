@@ -1,9 +1,14 @@
 Rails.application.routes.draw do
   root 'home#index'
+  # SEARCH ROUTES
+  resources :beers do
+    get 'search', on: :collection
+  end
 
   resources :users
   resources :breweries
   resources :beers
+
 
   # API ROUTES
   namespace :api do

@@ -1,0 +1,57 @@
+<div id="map"></div>
+
+<script>
+
+// var brewery_map = new Datamap({
+//   scope: 'usa',
+//   element: document.getElementById('map'),
+//   fills: {
+//   	HIGH: '#FFA200',
+//   	MEDIUM: '#FCAF32',
+//   	LOW: '#FFD085',
+//     defaultFill: '#E8C9FF'
+//   },
+//   data: {
+//   	SC: {
+//   		fillKey: 'HIGH',
+//   		numberOfThings: 5030
+//   	},
+//   	TX: {
+//   		fillKey: 'MEDIUM',
+//   		numberOfThings: 3021
+//   	},
+//   	NY: {
+//   		fillKey: 'LOW',
+//   		numberOfThings: 408
+//   	}
+//   },
+//   geographyConfig: {
+//     popupTemplate: function(geo, data) {
+//         return ['<div class="hoverinfo"><strong>',
+//                 'Number of things in ' + geo.properties.name,
+//                 ': ' + data.numberOfThings,
+//                 '</strong></div>'].join('');
+//     }
+// 	}
+
+// });
+
+var brewery_map = new Datamap({
+	element: document.getElementById('map'),
+	geographyConfig: {
+            dataUrl: '/us.topo.json'
+        },
+  scope: 'counties',
+  setProjection: function(element, options) {
+            var projection, path;
+            projection = d3.geo.albersUsa()
+                .scale(element.offsetWidth)
+                .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
+
+            path = d3.geo.path().projection( projection );
+
+            return {path: path, projection: projection};
+        }
+});
+	
+</script>

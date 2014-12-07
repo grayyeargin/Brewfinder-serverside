@@ -39,6 +39,7 @@ gem 'bcrypt', '~> 3.1.7'
 # gem 'debugger', group: [:development, :test]
 gem 'pry'
 gem 'json'
+gem 'topojson-rails', '~> 1.4.9'
 
 # scrapping data
 gem 'nokogiri'

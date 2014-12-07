@@ -10,4 +10,8 @@ class Beer < ActiveRecord::Base
     super(except: [:created_at, :updated_at])
   end
 
+  def self.beer_search(query)
+    eager_load(:brewery).where( 'lower(breweries.name) || lower(beers.name) || lower(style) LIKE ?', "%#{query.downcase}%").limit(100)
+  end
+
 end
