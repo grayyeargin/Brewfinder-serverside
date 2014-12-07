@@ -27,10 +27,13 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     user = User.create(user_params)
+    binding.pry
     if user.valid?
       redirect_to "/login"
     else
-      redirect_to :root
+      @errors = user.errors.full_messages
+      @user = User.new
+      render "new"
     end
   end
 
