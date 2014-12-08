@@ -11,6 +11,11 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+<% if current_user %>
+	<%= render partial: "/shared/user_nav" %>
+<% else %>
+	<%= render partial: "/shared/non_user_nav" %>
+<% end %>
 
 <%= yield %>
 

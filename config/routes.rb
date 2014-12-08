@@ -1,14 +1,19 @@
 Rails.application.routes.draw do
+
   root 'home#index'
+
   # SEARCH ROUTES
   resources :beers do
     get 'search', on: :collection
   end
 
+  # FULL CRUD ROUTES
   resources :users
   resources :breweries
   resources :beers
 
+  # CREATE LIKE
+  post "/likes" => "likes#create"
 
   # API ROUTES
   namespace :api do

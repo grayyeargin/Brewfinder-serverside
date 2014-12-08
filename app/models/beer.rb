@@ -1,5 +1,7 @@
 class Beer < ActiveRecord::Base
   belongs_to :brewery
+  has_many :likes
+  has_many :users, through: :likes
 
   scope :query,  -> (query){ where("lower(name)||lower(style) LIKE ?", "%#{query.downcase}%") }
   scope :style, -> (style){ where("lower(style) LIKE ?", "%#{style.downcase}%") }

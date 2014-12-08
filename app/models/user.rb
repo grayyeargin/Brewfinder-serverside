@@ -1,4 +1,7 @@
 class User < ActiveRecord::Base
+  has_many :likes
+  has_many :beers, through: :likes
+
   has_secure_password
 
   validates :first_name, :last_name, :presence => :true
