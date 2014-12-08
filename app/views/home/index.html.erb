@@ -2,56 +2,349 @@
 
 <script>
 
-// var brewery_map = new Datamap({
-//   scope: 'usa',
-//   element: document.getElementById('map'),
-//   fills: {
-//   	HIGH: '#FFA200',
-//   	MEDIUM: '#FCAF32',
-//   	LOW: '#FFD085',
-//     defaultFill: '#E8C9FF'
-//   },
-//   data: {
-//   	SC: {
-//   		fillKey: 'HIGH',
-//   		numberOfThings: 5030
-//   	},
-//   	TX: {
-//   		fillKey: 'MEDIUM',
-//   		numberOfThings: 3021
-//   	},
-//   	NY: {
-//   		fillKey: 'LOW',
-//   		numberOfThings: 408
-//   	}
-//   },
-//   geographyConfig: {
-//     popupTemplate: function(geo, data) {
-//         return ['<div class="hoverinfo"><strong>',
-//                 'Number of things in ' + geo.properties.name,
-//                 ': ' + data.numberOfThings,
-//                 '</strong></div>'].join('');
-//     }
-// 	}
-
-// });
-
 var brewery_map = new Datamap({
-	element: document.getElementById('map'),
-	geographyConfig: {
-            dataUrl: '/us.topo.json'
-        },
-  scope: 'counties',
-  setProjection: function(element, options) {
-            var projection, path;
-            projection = d3.geo.albersUsa()
-                .scale(element.offsetWidth)
-                .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
+  scope: 'usa',
+  element: document.getElementById('map'),
+  fills: {
+    VERYHIGH: '#0d4e66',
+  	HIGH: '#34778c',
+  	MEDIUM: '#6eb3c3',
+  	LOW: '#90d7e4',
+    VERYLOW: '#acf5ff',
+    defaultFill: '#faf4ee'
+  },
+  data: {
+  	CA: {
+            fillKey: 'MEDIUM',
+            numberOfBreweries: 265,
+            population: 38041430,
+            peoplePer: 143552
+          },
+    TX: {
+            fillKey: 'VERYLOW',
+            numberOfBreweries: 76,
+            population: 26059203,
+            peoplePer: 342884
+          },
+    NY: {
+            fillKey: 'LOW',
+            numberOfBreweries: 111,
+            population: 19570261,
+            peoplePer: 176308
+          },
+    FL: {
+            fillKey: 'VERYLOW',
+            numberOfBreweries: 68,
+            population: 19317568,
+            peoplePer: 284081
+          },
+    IL: {
+            fillKey: 'VERYLOW',
+            numberOfBreweries: 59,
+            population: 12875255,
+            peoplePer: 218224
+          },
+    PA: {
+            fillKey: 'MEDIUM',
+            numberOfBreweries: 88,
+            population: 12763536,
+            peoplePer: 145040
+          },
+    OH: {
+            fillKey: 'LOW',
+            numberOfBreweries: 61,
+            population: 11544225,
+            peoplePer: 189249
+          },
+    GA: {
+            fillKey: 'VERYLOW',
+            numberOfBreweries: 22,
+            population: 9919945,
+            peoplePer: 450906
+          },
+    MI: {
+            fillKey: 'MEDIUM',
+            numberOfBreweries: 94,
+            population: 9883360,
+            peoplePer: 105142
+          },
+    NC: {
+            fillKey: 'MEDIUM',
+            numberOfBreweries: 73,
+            population: 9752073,
+            peoplePer: 133590
+          },
+    NJ: {
+            fillKey: 'VERYLOW',
+            numberOfBreweries: 22,
+            population: 8864590,
+            peoplePer: 402935
+          },
+    VA: {
+            fillKey: 'MEDIUM',
+            numberOfBreweries: 64,
+            population: 8185867,
+            peoplePer: 127904
+          },
+    WA: {
+            fillKey: 'HIGH',
+            numberOfBreweries: 93,
+            population: 6897012,
+            peoplePer: 74161
+          },
+    MA: {
+            fillKey: 'LOW',
+            numberOfBreweries: 42,
+            population: 6646144,
+            peoplePer: 158241
+          },
+    AZ: {
+            fillKey: 'VERYLOW',
+            numberOfBreweries: 30,
+            population: 6553255,
+            peoplePer: 218441
+          },
+    IN: {
+            fillKey: 'MEDIUM',
+            numberOfBreweries: 45,
+            population: 6537334,
+            peoplePer: 145274
+          },
+    TN: {
+            fillKey: 'VERYLOW',
+            numberOfBreweries: 23,
+            population: 6456243,
+            peoplePer: 280706
+          },
+    MO: {
+            fillKey: 'LOW',
+            numberOfBreweries: 35,
+            population: 6021988,
+            peoplePer: 172056
+          },
+    MD: {
+            fillKey: 'VERYLOW',
+            numberOfBreweries: 20,
+            population: 5884563,
+            peoplePer: 294228
+          },
+    WI: {
+            fillKey: 'MEDIUM',
+            numberOfBreweries: 57,
+            population: 5726398,
+            peoplePer: 100463
+          },
+    MN: {
+            fillKey: 'MEDIUM',
+            numberOfBreweries: 40,
+            population: 5379139,
+            peoplePer: 134478
+          },
+    CO: {
+            fillKey: 'VERYHIGH',
+            numberOfBreweries: 152,
+            population: 5187582,
+            peoplePer: 34128
+          },
+    AL: {
+            fillKey: 'VERYLOW',
+            numberOfBreweries: 13,
+            population: 4822023,
+            peoplePer: 370924
+          },
+    SC: {
+            fillKey: 'LOW',
+            numberOfBreweries: 24,
+            population: 4723723,
+            peoplePer: 196821
+          },
+    LA: {
+            fillKey: 'VERYLOW',
+            numberOfBreweries: 9,
+            population: 4601893,
+            peoplePer: 511321
+          },
+    KY: {
+            fillKey: 'VERYLOW',
+            numberOfBreweries: 7,
+            population: 4380415,
+            peoplePer: 625773
+          },
+    OR: {
+            fillKey: 'VERYHIGH',
+            numberOfBreweries: 99,
+            population: 3899353,
+            peoplePer: 39387
+          },
+    OK: {
+            fillKey: 'VERYLOW',
+            numberOfBreweries: 7,
+            population: 3814820,
+            peoplePer: 544974
+          },
+    CT: {
+            fillKey: 'MEDIUM',
+            numberOfBreweries: 24,
+            population: 3590347,
+            peoplePer: 149597
+          },
+    IA: {
+            fillKey: 'MEDIUM',
+            numberOfBreweries: 26,
+            population: 3074186,
+            peoplePer: 118237
+          },
+    MS: {
+            fillKey: 'VERYLOW',
+            numberOfBreweries: 4,
+            population: 2984926,
+            peoplePer: 746231
+          },
+    AR: {
+            fillKey: 'VERYLOW',
+            numberOfBreweries: 9,
+            population: 2949131,
+            peoplePer: 327681
+          },
+    KS: {
+            fillKey: 'HIGH',
+            numberOfBreweries: 29,
+            population: 2885905,
+            peoplePer: 99513
+          },
+    UT: {
+            fillKey: 'VERYLOW',
+            numberOfBreweries: 10,
+            population: 2855287,
+            peoplePer: 285528
+          },
+    NV: {
+            fillKey: 'LOW',
+            numberOfBreweries: 14,
+            population: 2758931,
+            peoplePer: 197066
+          },
+    NM: {
+            fillKey: 'HIGH',
+            numberOfBreweries: 29,
+            population: 2085538,
+            peoplePer: 71915
+          },
+    NE: {
+            fillKey: 'MEDIUM',
+            numberOfBreweries: 15,
+            population: 1855525,
+            peoplePer: 123701
+          },
+    WV: {
+            fillKey: 'VERYLOW',
+            numberOfBreweries: 9,
+            population: 1855413,
+            peoplePer: 206157
+          },
+    ID: {
+            fillKey: 'HIGH',
+            numberOfBreweries: 21,
+            population: 1595728,
+            peoplePer: 75987
+          },
+    HI: {
+            fillKey: 'VERYLOW',
+            numberOfBreweries: 6,
+            population: 1392313,
+            peoplePer: 232052
+          },
+    ME: {
+            fillKey: 'VERYHIGH',
+            numberOfBreweries: 32,
+            population: 1329192,
+            peoplePer: 41537
+          },
+    NH: {
+            fillKey: 'VERYHIGH',
+            numberOfBreweries: 23,
+            population: 1320718,
+            peoplePer: 57422
+          },
+    RI: {
+            fillKey: 'MEDIUM',
+            numberOfBreweries: 10,
+            population: 1050292,
+            peoplePer: 105029
+          },
+    MT: {
+            fillKey: 'VERYHIGH',
+            numberOfBreweries: 23,
+            population: 1005141,
+            peoplePer: 43701
+          },
+    DE: {
+            fillKey: 'LOW',
+            numberOfBreweries: 5,
+            population: 917092,
+            peoplePer: 183418
+          },
+    SD: {
+            fillKey: 'LOW',
+            numberOfBreweries: 5,
+            population: 833354,
+            peoplePer: 166670
+          },
+    AK: {
+            fillKey: 'VERYHIGH',
+            numberOfBreweries: 16,
+            population: 731449,
+            peoplePer: 45715
+          },
+    ND: {
+            fillKey: 'MEDIUM',
+            numberOfBreweries: 5,
+            population: 699628,
+            peoplePer: 139925
+          },
+    VT: {
+            fillKey: 'VERYHIGH',
+            numberOfBreweries: 23,
+            population: 626011,
+            peoplePer: 27217
+          },
+    WY: {
+            fillKey: 'VERYHIGH',
+            numberOfBreweries: 11,
+            population: 576412,
+            peoplePer: 52401
+          }
+  },
+  geographyConfig: {
+    popupTemplate: function(geo, data) {
+        return ['<div class="hoverinfo"><strong>',
+                geo.properties.name+'</strong></br>'+
+                'People/Brewery: ' + data.peoplePer.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                '</div>'].join('');
+    }
+	}
 
-            path = d3.geo.path().projection( projection );
-
-            return {path: path, projection: projection};
-        }
 });
+
+brewery_map.legend();
+brewery_map.labels();
+
+// var brewery_map = new Datamap({
+// 	element: document.getElementById('map'),
+// 	geographyConfig: {
+//             dataUrl: '/us.topo.json'
+//         },
+//   scope: 'counties',
+//   setProjection: function(element, options) {
+//             var projection, path;
+//             projection = d3.geo.albersUsa()
+//                 .scale(element.offsetWidth)
+//                 .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
+
+//             path = d3.geo.path().projection( projection );
+
+//             return {path: path, projection: projection};
+//         }
+// });
 	
 </script>

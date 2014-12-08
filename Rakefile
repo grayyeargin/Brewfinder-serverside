@@ -67,4 +67,36 @@ namespace :db do
     end
   end
 
+  desc "population data"
+  task :create_map_population_hashes => :environment do
+    url = "http://simple.wikipedia.org/wiki/List_of_U.S._states_by_population"
+    data = Nokogiri::HTML(open(url))
+    @num = 0
+    50.times do
+      state = data.css('div#mw-content-text tr td a')[@num].text
+      total_breweries = Brewery.where("lower(location) LIKE ?", "%#{state.downcase}%").count
+      population = data.css('div#mw-content-text tr td:nth-child(3)')[@num].text.gsub(",","").to_i
+      people_per_brewery = population / total_breweries
+      if people_per_brewery < 70000
+        @brew_level = "VERYHIGH"
+      elsif people_per_brewery >= 70000 && people_per_brewery < 100000
+        @brew_level = "HIGH"
+      elsif people_per_brewery >= 100000 && people_per_brewery < 150000
+        @brew_level = "MEDIUM"
+      elsif people_per_brewery >= 150000 && people_per_brewery < 200000
+        @brew_level = "LOW"
+      else
+        @brew_level = "VERYLOW"
+      end
+
+      puts "#{state}: {
+        fillKey: '#{@brew_level}',
+        numberOfBreweries: #{total_breweries},
+        population: #{population},
+        peoplePer: #{people_per_brewery}
+      },"
+      @num += 1
+    end
+  end
+
 end
