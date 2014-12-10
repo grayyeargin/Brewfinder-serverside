@@ -44,3 +44,6 @@ gem 'topojson-rails', '~> 1.4.9'
 # scrapping data
 gem 'nokogiri'
 
+
+gem 'rails_12factor', group: :production
+

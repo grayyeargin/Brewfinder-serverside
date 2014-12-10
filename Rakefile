@@ -99,4 +99,19 @@ namespace :db do
     end
   end
 
+  desc "remove beers with no brewery"
+  task :remove_nobrew_beers => :environment do
+    beers = Beer.all
+    brewery_array = []
+    beers.each do |beer|
+      brewery = beer.brewery_id
+      if !Brewery.find_by(id: brewery)
+        brewery_array << brewery
+      end
+    end
+    puts brewery_array.uniq
+  end
+
+
+
 end
