@@ -48,21 +48,22 @@ namespace :db do
   desc "add image urls for brewery"
   task :brewery_image => :environment do
 
-    Brewery.where("id < 712").each do |brewery|
+    Brewery.all.each do |brewery|
       # look up image on search engine
 
-      url = "http://www.webcrawler.com/search/images?fcoid=417&fcop=topnav&fpid=2&aid=8a6747f9-1560-4e3c-a4fc-23a94a890691&ridx=4&q=#{brewery.name.gsub(" ", "+")}+logo+.jpg&ql=&ss=t"
+      url = "http://www.webcrawler.com/search/images?fcoid=417&fcop=topnav&fpid=27&aid=c0b3515b-5274-4ec7-b578-eb4802fbc8b4&ridx=1&q=#{brewery.name.gsub(" ", "+")}+logo&ql=&ss=t"
       begin
         images = Nokogiri::HTML(open(url))
       rescue
-        brewery.update(image_url: "http://nancyharmonjenkins.com/wp-content/plugins/nertworks-all-in-one-social-share-tools/images/no_image.png")
+        brewery.update(image_url: "http://upload.wikimedia.org/wikipedia/commons/2/24/The_Brewer_designed_and_engraved_in_the_Sixteenth._Century_by_J_Amman.png")
         next
       end
       # update brewery with new image
-      if images.css('#imageResults a img')[0]
-        brewery.update({image_url: images.css('#imageResults a img')[0].attribute('src').to_s})
+      if images.css(".resultThumbnail")[0]
+        brewery.update({image_url: images.css(".resultThumbnail")[0].attribute('src').to_s })
+        puts brewery.name
       else
-        brewery.update(image_url: "http://nancyharmonjenkins.com/wp-content/plugins/nertworks-all-in-one-social-share-tools/images/no_image.png")
+        brewery.update(image_url: "http://upload.wikimedia.org/wikipedia/commons/2/24/The_Brewer_designed_and_engraved_in_the_Sixteenth._Century_by_J_Amman.png")
       end
     end
   end
@@ -102,14 +103,41 @@ namespace :db do
   desc "remove beers with no brewery"
   task :remove_nobrew_beers => :environment do
     beers = Beer.all
-    brewery_array = []
     beers.each do |beer|
       brewery = beer.brewery_id
       if !Brewery.find_by(id: brewery)
-        brewery_array << brewery
+        beer.delete
       end
     end
-    puts brewery_array.uniq
+  end
+
+
+  desc "replace Style names with better ones"
+  task :update_style_names => :environment do
+    beers = Beer.all
+    beers.each do |beer|
+      if beer.style == "Saison / Farmhouse Ale"
+        beer.update({style: "Saison"})
+      end
+    end
+  end
+
+  desc "replace Style names with better ones"
+  task :count_styles => :environment do
+    beers = Beer.all
+    all_styles = []
+    beers.each do |beer|
+      all_styles << beer.style
+    end
+
+    unique = all_styles.uniq
+    unique.each do |style|
+      hash = {style: style, count: all_styles.count(style)}
+      puts hash
+    end
+
+
+
   end
 
 

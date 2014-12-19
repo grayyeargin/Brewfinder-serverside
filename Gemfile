@@ -41,6 +41,9 @@ gem 'pry'
 gem 'json'
 gem 'topojson-rails', '~> 1.4.9'
 
+# pagination gem
+gem 'will_paginate'
+
 # scrapping data
 gem 'nokogiri'
 

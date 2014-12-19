@@ -1,13 +1,15 @@
 class Api::BreweriesController < ApplicationController
   before_action :set_brewery, only: [:show, :edit, :update, :destroy]
 
-def index
-    @breweries = Brewery.all
+  def index
+    @breweries = Brewery.query(options["query"])
     render json: @breweries
   end
 
 
   def show
+    @brewery = Brewery.find(params[:id])
+    render json: custom_brewery_show(@brewery)
   end
 
 
@@ -56,7 +58,7 @@ def index
         "url" => brewery_name.url,
         "id" => brewery_name.id,
         "image" => brewery_name.image_url,
-        "beer-selection" => brewery_name.beers.map {|beer| beer.name}
+        "beer_selection" => brewery_name.beers.map {|beer| {"name" => beer.name, "style" => beer.style, "abv" => beer.abv, "beer_id" => beer.id}}
       }
     end
 

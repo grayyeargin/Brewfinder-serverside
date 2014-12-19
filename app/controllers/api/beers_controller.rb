@@ -2,8 +2,11 @@ class Api::BeersController < ApplicationController
   before_action :set_beer, only: [:show, :edit, :update, :destroy]
 
   def index
-    @beers = Beer.query(options["query"]).style(options["style"]).max_abv(options["max_abv"]).min_abv(options["min_abv"])
-    render json: @beers
+    total_beers = Beer.query(options["query"]).style(options["style"]).max_abv(options["max_abv"]).min_abv(options["min_abv"])
+    total = total_beers.count
+    paginated = total_beers.paginate(:page => params[:page], :per_page => 50)
+    beers = paginated.map {|beer| custom_beer_show(beer)}
+    render json: {"total" => total, "count" => 50, "beers" => beers}
   end
 
   def show
@@ -58,6 +61,7 @@ class Api::BeersController < ApplicationController
       {
         "id" => beer_name.id,
         "name" => beer_name.name,
+        "abv" => beer_name.abv,
         "style" => beer_name.style,
         "image" => beer_name.image,
         "brewery_name" => beer_name.brewery.name,
