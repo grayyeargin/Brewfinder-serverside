@@ -1,6 +1,7 @@
 class Api::BeersController < ApplicationController
   before_action :set_beer, only: [:show, :edit, :update, :destroy]
 
+
   def index
     total_beers = Beer.query(options["query"]).style(options["style"]).max_abv(options["max_abv"]).min_abv(options["min_abv"])
     total = total_beers.count
@@ -34,7 +35,7 @@ class Api::BeersController < ApplicationController
   # PATCH/PUT /beers/1.json
   def update
     beer = Beer.find(params[:id])
-    beer.update(turtle_params)
+    beer.update(beer_params)
     render json: beer
   end
 
@@ -54,7 +55,7 @@ class Api::BeersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def beer_params
-      params.require(:beer).permit(:beer.string, :brewery.string, :style.string, :abv.string)
+      params.require(:beer).permit(:name, :brewery_id, :style, :abv, :description, :image)
     end
 
     def custom_beer_show(beer_name)
@@ -64,6 +65,7 @@ class Api::BeersController < ApplicationController
         "abv" => beer_name.abv,
         "style" => beer_name.style,
         "image" => beer_name.image,
+        "description" => beer_name.description,
         "brewery_name" => beer_name.brewery.name,
         "brewery_id" => beer_name.brewery.id
       }

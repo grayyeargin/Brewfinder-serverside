@@ -47,6 +47,8 @@ gem 'will_paginate'
 # scrapping data
 gem 'nokogiri'
 
+gem 'rack-cors', :require => 'rack/cors'
+
 
 gem 'rails_12factor', group: :production
 

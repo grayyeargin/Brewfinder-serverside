@@ -14,7 +14,7 @@ namespace :db do
   desc "seed ALL the beers yo!"
   task :seed_beer => :environment do
 
-    breweries_array = ["brewery 85"]
+    breweries_array = ["Highland Brewing"]
     breweries_array.each do |brewery|
       url = "http://www.beeradvocate.com/search/?q=#{brewery.gsub(" ", "+")}+&qt=place"
       result = Nokogiri::HTML(open(url))
@@ -135,10 +135,80 @@ namespace :db do
       hash = {style: style, count: all_styles.count(style)}
       puts hash
     end
-
-
-
   end
+
+
+  desc "replace Style names with better ones"
+  task :add_images_to_beers => :environment do
+    beers = Beer.where("id > 35000")
+    beers.each do |beer|
+      beer_query = beer.name.gsub(" ", "").gsub("'", "").gsub("(", "").gsub(")", "").gsub("!", "").gsub("(?", "")
+      url = "http://#{beer_query}.jpg.to"
+      begin
+        images = Nokogiri::HTML(open(url))
+      rescue
+        next
+      end
+      if images.css('img')[0] && images.css('img')[0].attribute('src').to_s.length < 255
+        beer.update({image: images.css('img')[0].attribute('src').to_s })
+      end
+      puts beer.name
+    end
+  end
+
+  desc "create addresses for breweries"
+  task :address_for_breweries => :environment do
+    breweries = Brewery.all
+    breweries.each do |brewery|
+      brew_location = brewery.location.split(", ")
+      begin
+        url = "http://www.yellowpages.com/search?search_terms=#{brewery.name.gsub(" ", "+")}&geo_location_terms=#{brew_location[0].gsub(" ", "+")}%2C+#{brew_location[1].gsub(" ", "+")}"
+        response = Nokogiri::HTML(open(url))
+      rescue
+        puts brewery.name
+        next
+      end
+      if response.css('p.adr span')[0] && response.css('p.adr span')[1] && response.css('p.adr span')[2] && response.css('p.adr span')[3] && response.css('li.phone.primary')[0]
+        brewery.update({address: response.css('p.adr span')[0].text + ", " + response.css('p.adr span')[1].text + response.css('p.adr span')[2].text + " " + response.css('p.adr span')[3].text, phone_number: response.css('li.phone.primary')[0].text })
+      end
+      puts brewery.address
+    end
+  end
+
+  desc "add description to beers"
+  task :description_to_beers => :environment do
+    beers = Beer.all
+    beers.each do |beer|
+      brewery_full = Brewery.find(beer.brewery_id)
+      brewery_first = brewery_full.name.split(" ").first
+      beer_with_brew = brewery_first + " " + beer.name
+      query = beer_with_brew.downcase.split(" ").uniq.join(" ")
+      url = "https://www.beermenus.com/search?q=#{query.gsub(" ", "+")}"
+      begin
+        response = Nokogiri::HTML(open(url))
+        new_url = response.css('h3 a').attribute('href').to_s
+      rescue
+        puts "NOOOOOO: " + beer.name
+        next
+      end
+
+      url = "https://www.beermenus.com" + new_url
+      begin
+        response = Nokogiri::HTML(open(url))
+      rescue
+        puts "NOOOOOO: " + beer.name
+        next
+      end
+
+      if response.css('div.description p') && response.css('div.title h1')
+        beer.update({name: response.css('div.title h1').text.strip, description: response.css('div.description p').text})
+      end
+      puts "BOOYA!!!: " + beer.name
+    end
+  end
+
+
+
 
 
 
