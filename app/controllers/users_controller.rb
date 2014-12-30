@@ -29,7 +29,7 @@ class UsersController < ApplicationController
     user = User.create(user_params)
     binding.pry
     if user.valid?
-      redirect_to "/login"
+       render json: {user: user}
     else
       @errors = user.errors.full_messages
       @user = User.new
