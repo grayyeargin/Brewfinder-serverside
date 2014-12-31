@@ -1,12 +1,10 @@
 class SessionsController < ApplicationController
 
   def login
-    binding.pry
     user = User.find_by(username: params[:username])
     if user && user.authenticate(params[:password])
       session[:user_id] = user.id
-
-      render json: {message: "yayyyy"}
+      render json: {message: "yayyyy", current_user: current_user}
     else
       session[:user_id] = nil
 
