@@ -138,21 +138,28 @@ namespace :db do
   end
 
 
-  desc "replace Style names with better ones"
+  desc "Find better BEER images"
   task :add_images_to_beers => :environment do
-    beers = Beer.where("id > 35000")
+    beers = Beer.where(image: "http://cdn.lifeofdad.com/uploads/profilepics/216_1333609674_11949907341218632906beer.jpg")
     beers.each do |beer|
-      beer_query = beer.name.gsub(" ", "").gsub("'", "").gsub("(", "").gsub(")", "").gsub("!", "").gsub("(?", "")
-      url = "http://#{beer_query}.jpg.to"
+      brewery = Brewery.find(beer.brewery_id)
+      brewery_name = brewery.name.split(" ")[0]
+      beer_name = beer.name.gsub(" ", "").gsub("'", "").gsub("(", "").gsub(")", "").gsub("!", "").gsub("(?", "")
+      if beer.name.include? brewery_name
+        url = "http://#{beer_name}.jpg.to"
+      else
+        url = "http://#{brewery_name}#{beer_name}.jpg.to"
+      end
       begin
         images = Nokogiri::HTML(open(url))
       rescue
+        puts "NOOO: " + beer.name
         next
       end
       if images.css('img')[0] && images.css('img')[0].attribute('src').to_s.length < 255
         beer.update({image: images.css('img')[0].attribute('src').to_s })
       end
-      puts beer.name
+      puts "YAYYYY: " + beer.name
     end
   end
 

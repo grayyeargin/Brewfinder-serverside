@@ -15,6 +15,9 @@ Rails.application.routes.draw do
   # CREATE LIKE
   post "/likes" => "likes#create"
 
+  # CREATE REVIEW
+  post "/reviews" => "reviews#create"
+
   # API ROUTES
   namespace :api do
     resources :breweries
