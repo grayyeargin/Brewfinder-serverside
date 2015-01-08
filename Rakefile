@@ -160,8 +160,8 @@ namespace :db do
   task :add_images_to_breweries => :environment do
     breweries = Brewery.all
     breweries.each do |brewery|
-      brewery_query = brewery.name.gsub(" ", "").gsub("'", "").gsub("(", "").gsub(")", "").gsub("!", "").gsub("(?", "")
-      url = "http://#{brewery_query}.jpg.to"
+      brewery_query = brewery.name.gsub("Co.", "").gsub("Company", "").gsub(" ", "").gsub("'", "").gsub("(", "").gsub(")", "").gsub("!", "").gsub("(?", "").gsub("&", "")
+      url = "http://#{brewery_query}logo.jpg.to"
       begin
         images = Nokogiri::HTML(open(url))
       rescue
