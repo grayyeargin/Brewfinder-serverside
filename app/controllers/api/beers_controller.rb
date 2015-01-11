@@ -3,11 +3,12 @@ class Api::BeersController < ApplicationController
 
 
   def index
-    total_beers = Beer.query(options["query"]).style(options["style"]).max_abv(options["max_abv"]).min_abv(options["min_abv"])
+    total_beers = Beer.query(options["query"]).style(options["style"]).max_abv(options["max_abv"]).min_abv(options["min_abv"]).order(updated_at: :desc)
     total = total_beers.count
+    total_pages = (total/50).ceil
     paginated = total_beers.paginate(:page => params[:page], :per_page => 50)
     beers = paginated.map {|beer| custom_beer_show(beer)}
-    render json: {"total" => total, "count" => 50, "beers" => beers}
+    render json: {"total" => total, "count" => 50, "total_pages" => total_pages, "beers" => beers}
   end
 
   def show
@@ -67,7 +68,18 @@ class Api::BeersController < ApplicationController
         "image" => beer_name.image,
         "description" => beer_name.description,
         "brewery_name" => beer_name.brewery.name,
-        "brewery_id" => beer_name.brewery.id
+        "brewery_id" => beer_name.brewery.id,
+        "avg_rating" => Review.where(beer_id: beer_name.id).average(:rating).to_i,
+        "total_ratings" => Review.where(beer_id: beer_name.id).count,
+        "reviews" => beer_name.reviews.map {|review| custom_review_show(review)}
+      }
+    end
+
+    def custom_review_show(review)
+      {
+        "user" => review.user.username,
+        "rating" => review.rating,
+        "comment" => review.comment
       }
     end
 

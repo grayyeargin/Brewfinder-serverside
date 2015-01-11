@@ -18,6 +18,8 @@ Rails.application.routes.draw do
   # CREATE REVIEW
   post "/reviews" => "reviews#create"
 
+  get "/styles" => "styles#index"
+
   # API ROUTES
   namespace :api do
     resources :breweries

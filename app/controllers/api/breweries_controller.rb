@@ -58,6 +58,8 @@ class Api::BreweriesController < ApplicationController
         "url" => brewery_name.url,
         "id" => brewery_name.id,
         "image" => brewery_name.image_url,
+        "address" => brewery_name.address,
+        "phone_number" => brewery_name.phone_number,
         "beer_selection" => brewery_name.beers.map {|beer| {"name" => beer.name, "style" => beer.style, "abv" => beer.abv, "beer_id" => beer.id}}
       }
     end

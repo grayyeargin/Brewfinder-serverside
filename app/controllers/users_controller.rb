@@ -71,7 +71,8 @@ class UsersController < ApplicationController
         "image_url" => user_name.image_url,
         "first_name" => user_name.first_name,
         "last_name" => user_name.last_name,
-        "likes" => user_name.likes.map {|like| custom_beer_show(Beer.find(like.beer_id.to_i))}
+        "likes" => user_name.likes.map {|like| custom_beer_show(Beer.find(like.beer_id.to_i))},
+        "reviews" => user_name.reviews.map {|review| custom_review_show(review)}
       }
     end
 
@@ -85,6 +86,17 @@ class UsersController < ApplicationController
         "description" => beer_name.description,
         "brewery_name" => beer_name.brewery.name,
         "brewery_id" => beer_name.brewery.id
+      }
+    end
+
+    def custom_review_show(review)
+      {
+        "beer" => review.beer.name,
+        "style" => review.beer.style,
+        "image" => review.beer.image,
+        "beer_id" => review.beer_id,
+        "rating" => review.rating,
+        "comment" => review.comment
       }
     end
 

@@ -1,6 +1,10 @@
 class User < ActiveRecord::Base
   has_many :likes
   has_many :beers, through: :likes
+  has_many :reviews
+
+  has_many :follows
+  has_many :followings, :through => :follows
 
   has_secure_password
 

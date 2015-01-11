@@ -233,6 +233,13 @@ namespace :db do
     end
   end
 
+  desc "add description to STYLES"
+  task :seed_styles => :environment do
+
+    Style.create({name: "Oktoberfest", description: "Also known as Märzen, Oktoberfest beers are full-bodied, rich, toasty, typically dark copper in color with a medium to high alcohol content. The Oktoberfest name comes because this style of beer is the beer of choice at the Munich Oktoberfest festival."})
+
+  end
+
 
 
 

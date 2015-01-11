@@ -1,6 +1,8 @@
 class LikesController < ApplicationController
   def create
     like = Like.create(user_id: params[:user_id], beer_id: params[:beer_id])
+    beer = Beer.find(params[:beer_id])
+    beer.update(like_no: beer.like_no + 1)
     user = User.find(params[:user_id])
     render json: {user: custom_user_show(user)}
   end
