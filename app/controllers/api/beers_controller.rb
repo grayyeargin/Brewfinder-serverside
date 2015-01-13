@@ -69,8 +69,8 @@ class Api::BeersController < ApplicationController
         "description" => beer_name.description,
         "brewery_name" => beer_name.brewery.name,
         "brewery_id" => beer_name.brewery.id,
-        "avg_rating" => Review.where(beer_id: beer_name.id).average(:rating).to_i,
-        "total_ratings" => Review.where(beer_id: beer_name.id).count,
+        "avg_rating" => beer_name.avg_rating,
+        "rating_no" => beer_name.rating_no,
         "reviews" => beer_name.reviews.map {|review| custom_review_show(review)}
       }
     end
@@ -79,6 +79,7 @@ class Api::BeersController < ApplicationController
       {
         "user" => review.user.username,
         "rating" => review.rating,
+        "user_image" => review.user.image_url,
         "comment" => review.comment
       }
     end
