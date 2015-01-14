@@ -2,7 +2,7 @@ class LikesController < ApplicationController
   def create
     like = Like.create(user_id: params[:user_id], beer_id: params[:beer_id])
     beer = Beer.find(params[:beer_id])
-    beer.update(like_no: beer.like_no + 1)
+    beer.update(like_no: ((beer.like_no || 0) + 1))
     user = User.find(params[:user_id])
     render json: {user: custom_user_show(user)}
   end
@@ -13,6 +13,7 @@ class LikesController < ApplicationController
         "username" => user_name.username,
         "image_url" => user_name.image_url,
         "first_name" => user_name.first_name,
+        "id" => user_name.id,
         "last_name" => user_name.last_name,
         "likes" => user_name.likes.map {|like| custom_beer_show(Beer.find(like.beer_id.to_i))}
       }

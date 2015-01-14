@@ -28,13 +28,11 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     user = User.create(user_params)
-    binding.pry
     if user.valid?
        render json: {user: user}
     else
-      @errors = user.errors.full_messages
-      @user = User.new
-      render "new"
+      errors = user.errors.full_messages
+      render json: {errors: errors}
     end
   end
 

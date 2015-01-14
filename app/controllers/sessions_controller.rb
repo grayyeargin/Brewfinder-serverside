@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
     else
       session[:user_id] = nil
 
-      render json: {message: "you totally fucked up"}
+      render json: {message: "you totally fucked up", error: "errors"}
     end
   end
 

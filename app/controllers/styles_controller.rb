@@ -11,17 +11,17 @@ class StylesController < ApplicationController
     {
       "name" => style.name,
       "description" => style.description,
-      "beers" => Beer.where(style: params["style"]).where('avg_rating > 0').order(avg_rating: :asc).limit(10).map {|beer| custom_beer_show(beer)}
+      "beers" => Beer.where(style: params["style"]).where('avg_rating > 0').order(avg_rating: :desc).limit(10).map {|beer| custom_beer_show(beer)}
     }
   end
 
   def abv_response(total)
     [
-      {value: "very_low", count: Beer.where(style: params["style"]).where('abv > 0 AND abv < 4').count, percent: Beer.where(style: params["style"]).where('abv > 0 AND abv < 3').count / total.to_f},
-      {value: "low", count: Beer.where(style: params["style"]).where('abv >= 4 AND abv < 6').count, percent: Beer.where(style: params["style"]).where('abv >= 3 AND abv < 5').count / total.to_f},
-      {value: "medium", count: Beer.where(style: params["style"]).where('abv >= 6 AND abv < 8').count, percent: Beer.where(style: params["style"]).where('abv >= 5 AND abv < 7').count / total.to_f},
-      {value: "high", count: Beer.where(style: params["style"]).where('abv >= 8 AND abv < 10').count, percent: Beer.where(style: params["style"]).where('abv >= 7 AND abv < 10').count / total.to_f},
-      {value: "very_high", count: Beer.where(style: params["style"]).where('abv > 10').count, percent: Beer.where(style: params["style"]).where('abv > 10').count / total.to_f}
+      {value: "abv < 5%", count: Beer.where(style: params["style"]).where('abv > 0 AND abv < 5').count, percent: Beer.where(style: params["style"]).where('abv > 0 AND abv < 3').count / total.to_f},
+      {value: "5 - 5.9", count: Beer.where(style: params["style"]).where('abv >= 5 AND abv < 6').count, percent: Beer.where(style: params["style"]).where('abv >= 3 AND abv < 5').count / total.to_f},
+      {value: "6 - 6.9", count: Beer.where(style: params["style"]).where('abv >= 6 AND abv < 7').count, percent: Beer.where(style: params["style"]).where('abv >= 5 AND abv < 7').count / total.to_f},
+      {value: "7 - 7.9", count: Beer.where(style: params["style"]).where('abv >= 7 AND abv < 8').count, percent: Beer.where(style: params["style"]).where('abv >= 7 AND abv < 10').count / total.to_f},
+      {value: "abv >= 8%", count: Beer.where(style: params["style"]).where('abv > 8').count, percent: Beer.where(style: params["style"]).where('abv > 8').count / total.to_f}
     ]
   end
 

@@ -71,7 +71,7 @@ class Api::BeersController < ApplicationController
         "brewery_id" => beer_name.brewery.id,
         "avg_rating" => beer_name.avg_rating,
         "rating_no" => beer_name.rating_no,
-        "reviews" => beer_name.reviews.map {|review| custom_review_show(review)}
+
       }
     end
 
