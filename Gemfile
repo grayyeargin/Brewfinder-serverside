@@ -1,3 +1,4 @@
+# encoding: UTF-8
 source 'https://rubygems.org'
 
 
@@ -48,6 +49,7 @@ gem 'will_paginate'
 gem 'nokogiri'
 
 gem 'rack-cors', :require => 'rack/cors'
+gem 'therubyracer'
 
 
 gem 'rails_12factor', group: :production
