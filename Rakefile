@@ -240,9 +240,25 @@ namespace :db do
 
   end
 
+  desc "add long and lat to breweries"
+  task :long_lat => :environment do
 
+    breweries = Brewery.all
+    breweries.each do |brewery|
+        begin
+          address = brewery.address.gsub(" ", "%20")
+          url = "http://geocoder.us/demo.cgi?address=#{address}"
+          response = Nokogiri::HTML(open(url))
+        rescue
+          puts "NOOOO: " + brewery.name
+          next
+        end
 
-
-
+        if response.search('tr td').map(&:text)[4] && response.search('tr td').map(&:text)[6]
+          brewery.update(latitude: response.search('tr td').map(&:text)[4].split(" ")[0].to_f, longitude: response.search('tr td').map(&:text)[6].split(" ")[0].to_f)
+        end
+        puts "BOOYA!!!: " + brewery.name
+      end
+    end
 
 end
